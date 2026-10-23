@@ -17,5 +17,10 @@ class Settings(BaseSettings):
     s3_secret_key: str
     s3_bucket: str = "resolviq-evidence"
 
+    # JWT (login tokens)
+    jwt_secret_key: str
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+
 
 settings = Settings()
