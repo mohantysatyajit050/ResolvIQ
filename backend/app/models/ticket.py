@@ -2,7 +2,16 @@ import enum
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, String, Text, func
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    Text,
+    func,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, check_in
@@ -40,6 +49,13 @@ class Ticket(Base):
         CheckConstraint(check_in("status", TicketStatus), name="ck_tickets_status"),
         CheckConstraint(check_in("priority", TicketPriority), name="ck_tickets_priority"),
         CheckConstraint(check_in("intent", TicketIntent), name="ck_tickets_intent"),
+        # The database itself allows only one active ticket per order.
+        Index(
+            "uq_tickets_one_active_per_order",
+            "order_id",
+            unique=True,
+            postgresql_where=text("status NOT IN ('resolved', 'closed')"),
+        ),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
