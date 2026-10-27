@@ -22,5 +22,10 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
 
+    # Evidence uploads
+    max_upload_bytes: int = 5 * 1024 * 1024  # 5 MB per file
+    max_attachments_per_ticket: int = 5
+    download_url_expire_seconds: int = 300  # signed download links last 5 minutes
+
 
 settings = Settings()

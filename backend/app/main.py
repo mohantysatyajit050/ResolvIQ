@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import auth, health, orders, tickets
+from app.api.routes import attachments, auth, health, orders, tickets
 from app.core.config import settings
 
 app = FastAPI(title=settings.app_name)
@@ -18,3 +18,4 @@ app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(orders.router)
 app.include_router(tickets.router)
+app.include_router(attachments.router)
