@@ -1,5 +1,11 @@
-﻿import AppRoutes from "./routes";
+import { RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
+import { router } from "./routes";
 
 export default function App() {
-  return <AppRoutes />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }

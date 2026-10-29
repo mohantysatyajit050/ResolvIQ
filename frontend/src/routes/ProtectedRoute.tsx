@@ -1,22 +1,29 @@
-﻿import type { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import ForbiddenPage from "../pages/ForbiddenPage";
+import type { UserRole } from "../types/auth";
 
-export default function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { status } = useAuth();
+type ProtectedRouteProps = {
+  /** If set, only these roles may open the page. */
+  allowedRoles?: UserRole[];
+};
+
+/**
+ * This only improves the experience. It is NOT security:
+ * the server checks every request again, whatever this screen shows.
+ */
+export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
+  const { user, status } = useAuth();
   const location = useLocation();
 
   if (status === "loading") {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50">
-        <p className="text-slate-600">Loading your session...</p>
-      </main>
-    );
+    return <p className="p-6 text-slate-600">Loading...</p>;
   }
-
-  if (status !== "authenticated") {
+  if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
-
-  return <>{children}</>;
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <ForbiddenPage />;
+  }
+  return <Outlet />;
 }
