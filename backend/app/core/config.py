@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,6 +23,10 @@ class Settings(BaseSettings):
     jwt_secret_key: str
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+
+    # Login cookies
+    cookie_secure: bool = False  # set COOKIE_SECURE=true when the site runs on HTTPS
+    cookie_samesite: Literal["lax", "strict", "none"] = "lax"
 
     # Evidence uploads
     max_upload_bytes: int = 5 * 1024 * 1024  # 5 MB per file

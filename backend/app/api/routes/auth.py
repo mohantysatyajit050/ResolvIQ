@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user
 from app.core.config import settings
+from app.core.cookies import clear_session_cookies, set_session_cookies
 from app.core.security import create_access_token
 from app.db.session import get_db
 from app.models.user import User
@@ -25,7 +26,8 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(data: LoginRequest, db: Session = Depends(get_db)):
+def login(data: LoginRequest, response: Response, db: Session = Depends(get_db)):
+    """Browsers use the cookies this sets. The token is also returned for Swagger and API clients."""
     try:
         user = user_service.authenticate_user(db, data.email, data.password)
     except user_service.InvalidCredentialsError:
@@ -40,13 +42,21 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
             detail="Account is disabled",
         ) from None
 
+    token = create_access_token(user.id)
+    set_session_cookies(response, token)
     return TokenResponse(
-        access_token=create_access_token(user.id),
+        access_token=token,
         expires_in=settings.access_token_expire_minutes * 60,
     )
 
 
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout(response: Response):
+    """Delete the login cookies. It works even when the session has already expired."""
+    clear_session_cookies(response)
+
+
 @router.get("/me", response_model=UserRead)
 def me(current_user: User = Depends(get_current_user)):
-    """Who am I? Needs a valid token."""
+    """Who am I? Needs a valid token or session cookie."""
     return current_user

@@ -1,10 +1,17 @@
 from collections.abc import Callable
 
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
+from app.core.cookies import (
+    ACCESS_COOKIE_NAME,
+    CSRF_COOKIE_NAME,
+    CSRF_HEADER_NAME,
+    SAFE_METHODS,
+    csrf_matches,
+)
 from app.core.security import decode_access_token
 from app.db.session import get_db
 from app.models.user import User, UserRole
@@ -23,15 +30,33 @@ def _unauthorized(detail: str = "Not authenticated") -> HTTPException:
 
 
 def get_current_user(
+    request: Request,
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
-    """Who is calling? Read the token, then load the user fresh from the database."""
-    if credentials is None:
+    """Who is calling? Read the token (header first, then cookie) and load the user fresh."""
+    token: str | None = credentials.credentials if credentials else None
+    used_cookie = False
+    if token is None:
+        token = request.cookies.get(ACCESS_COOKIE_NAME)
+        used_cookie = token is not None
+    if token is None:
         raise _unauthorized()
 
+    # A browser sends cookies by itself, so a cookie login needs CSRF protection on writes.
+    # A Bearer header is never added by the browser on its own, so it needs no CSRF check.
+    if used_cookie and request.method not in SAFE_METHODS:
+        if not csrf_matches(
+            request.cookies.get(CSRF_COOKIE_NAME),
+            request.headers.get(CSRF_HEADER_NAME),
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="CSRF token missing or invalid",
+            )
+
     try:
-        user_id = decode_access_token(credentials.credentials)
+        user_id = decode_access_token(token)
     except jwt.InvalidTokenError:
         raise _unauthorized("Invalid or expired token") from None
 
