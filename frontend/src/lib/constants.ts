@@ -4,3 +4,6 @@ import type { UserRole } from "../types/auth";
 export function homePathFor(role: UserRole): string {
   return role === "customer" ? "/orders" : "/agent/queue";
 }
+
+/** How many rows one page of a list shows. */
+export const PAGE_SIZE = 10;

@@ -4,6 +4,9 @@ import AgentQueuePage from "../pages/agent/AgentQueuePage";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import MyOrdersPage from "../pages/customer/MyOrdersPage";
+import MyTicketsPage from "../pages/customer/MyTicketsPage";
+import NewComplaintPage from "../pages/customer/NewComplaintPage";
+import TicketDetailPage from "../pages/customer/TicketDetailPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import GuestRoute from "./GuestRoute";
 import HomeRedirect from "./HomeRedirect";
@@ -28,7 +31,12 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <AppShell />,
-        children: [{ path: "/orders", element: <MyOrdersPage /> }],
+        children: [
+          { path: "/orders", element: <MyOrdersPage /> },
+          { path: "/tickets", element: <MyTicketsPage /> },
+          { path: "/tickets/new", element: <NewComplaintPage /> },
+          { path: "/tickets/:ticketId", element: <TicketDetailPage /> },
+        ],
       },
     ],
   },
