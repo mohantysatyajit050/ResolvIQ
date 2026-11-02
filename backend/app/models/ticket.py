@@ -16,6 +16,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, check_in
 from app.models.order import Order
+from app.models.user import User
 
 
 class TicketStatus(enum.StrEnum):
@@ -92,6 +93,9 @@ class Ticket(Base):
     )
 
     order: Mapped[Order] = relationship()
+    # two columns point at users, so each relationship says which one it follows
+    customer: Mapped[User] = relationship(foreign_keys=[user_id])
+    assigned_agent: Mapped[User | None] = relationship(foreign_keys=[assigned_agent_id])
     messages: Mapped[list["TicketMessage"]] = relationship(
         back_populates="ticket",
         cascade="all, delete-orphan",

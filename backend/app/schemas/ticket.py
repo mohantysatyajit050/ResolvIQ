@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, StringConstraints
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 from app.models.ticket import TicketIntent, TicketPriority, TicketStatus
 from app.models.ticket_message import SenderType
@@ -42,6 +42,46 @@ class MessageRead(BaseModel):
     created_at: datetime
 
 
+class CustomerBrief(BaseModel):
+    """Who raised the ticket. Customers only ever see themselves here."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    name: str
+    email: str
+    phone: str | None
+
+
+class AgentBrief(BaseModel):
+    """The agent on a ticket: the name only, never the email or phone."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    name: str
+
+
+class AssignRequest(BaseModel):
+    """Body of POST /tickets/{id}/assign. Empty means "assign it to me"."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    agent_id: uuid.UUID | None = None  # only an admin may name someone else
+
+
+class StatusChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: TicketStatus
+
+
+class PriorityChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    priority: TicketPriority
+
+
 class TicketSummary(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -57,9 +97,13 @@ class TicketSummary(BaseModel):
     created_at: datetime
     updated_at: datetime
     resolved_at: datetime | None
+    customer: CustomerBrief
+    assigned_agent: AgentBrief | None
 
 
 class TicketDetail(TicketSummary):
     description: str
     order: OrderRead
     messages: list[MessageRead]
+    # What the caller may move this ticket to. The page shows exactly these buttons.
+    allowed_next_statuses: list[TicketStatus] = Field(default_factory=list)

@@ -21,11 +21,11 @@ A = Actor
 # Every allowed arrow of the ticket status flow, and who may take it.
 # Anything that is not listed here is refused.
 ALLOWED_TRANSITIONS: dict[tuple[TicketStatus, TicketStatus], frozenset[Actor]] = {
-    (S.OPEN, S.INVESTIGATING): frozenset({A.SYSTEM}),  # 1
+    (S.OPEN, S.INVESTIGATING): frozenset({A.SYSTEM, A.AGENT}),  # 1 (an agent takes the ticket)
     (S.INVESTIGATING, S.WAITING_FOR_CUSTOMER): frozenset({A.AI, A.AGENT}),  # 2
     (S.WAITING_FOR_CUSTOMER, S.INVESTIGATING): frozenset({A.CUSTOMER}),  # 3
-    (S.INVESTIGATING, S.WAITING_FOR_APPROVAL): frozenset({A.AI}),  # 4
-    (S.INVESTIGATING, S.RESOLVED): frozenset({A.AI}),  # 5
+    (S.INVESTIGATING, S.WAITING_FOR_APPROVAL): frozenset({A.AI}),  # 4 (only the AI asks for approval)
+    (S.INVESTIGATING, S.RESOLVED): frozenset({A.AI, A.AGENT}),  # 5
     (S.WAITING_FOR_APPROVAL, S.RESOLVED): frozenset({A.AGENT}),  # 6
     (S.WAITING_FOR_APPROVAL, S.INVESTIGATING): frozenset({A.AGENT}),  # 7
     (S.RESOLVED, S.INVESTIGATING): frozenset({A.CUSTOMER}),  # 8
@@ -37,6 +37,15 @@ ALLOWED_TRANSITIONS: dict[tuple[TicketStatus, TicketStatus], frozenset[Actor]] =
 
 def can_transition(current: TicketStatus, new: TicketStatus, actor: Actor) -> bool:
     return actor in ALLOWED_TRANSITIONS.get((current, new), frozenset())
+
+
+def allowed_next(current: TicketStatus, actor: Actor) -> list[TicketStatus]:
+    """The statuses this kind of actor may move a ticket to from its current status."""
+    return [
+        new
+        for (old, new), actors in ALLOWED_TRANSITIONS.items()
+        if old is current and actor in actors
+    ]
 
 
 def change_status(ticket: Ticket, new_status: TicketStatus, actor: Actor) -> None:

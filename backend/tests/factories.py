@@ -63,17 +63,25 @@ def make_ticket(
     status=TicketStatus.OPEN,
     subject="Where is my order?",
     description="It is late.",
+    priority="medium",
+    assigned_agent=None,
+    created_at=None,
 ) -> Ticket:
     ticket = Ticket(
         user_id=user.id,
         order_id=order.id,
+        assigned_agent_id=assigned_agent.id if assigned_agent else None,
         subject=subject,
         description=description,
         status=status.value,
+        priority=priority,
         messages=[
             TicketMessage(sender_id=user.id, sender_type="customer", body=description)
         ],
     )
+    if created_at is not None:
+        ticket.created_at = created_at
+        ticket.updated_at = created_at
     db.add(ticket)
     db.commit()
     return ticket

@@ -7,6 +7,7 @@ from app.services.ticket_state import (
     ALLOWED_TRANSITIONS,
     Actor,
     InvalidTransitionError,
+    allowed_next,
     can_transition,
     change_status,
 )
@@ -16,10 +17,12 @@ A = Actor
 
 ALLOWED = [
     (S.OPEN, S.INVESTIGATING, A.SYSTEM),
+    (S.OPEN, S.INVESTIGATING, A.AGENT),
     (S.INVESTIGATING, S.WAITING_FOR_CUSTOMER, A.AI),
     (S.WAITING_FOR_CUSTOMER, S.INVESTIGATING, A.CUSTOMER),
     (S.INVESTIGATING, S.WAITING_FOR_APPROVAL, A.AI),
     (S.INVESTIGATING, S.RESOLVED, A.AI),
+    (S.INVESTIGATING, S.RESOLVED, A.AGENT),
     (S.WAITING_FOR_APPROVAL, S.RESOLVED, A.AGENT),
     (S.WAITING_FOR_APPROVAL, S.INVESTIGATING, A.AGENT),
     (S.RESOLVED, S.INVESTIGATING, A.CUSTOMER),
@@ -35,6 +38,9 @@ FORBIDDEN = [
     (S.WAITING_FOR_APPROVAL, S.RESOLVED, A.CUSTOMER),
     (S.RESOLVED, S.INVESTIGATING, A.AGENT),  # only the customer reopens
     (S.CLOSED, S.INVESTIGATING, A.CUSTOMER),  # closed tickets stay closed
+    (S.INVESTIGATING, S.WAITING_FOR_APPROVAL, A.AGENT),  # only the AI asks for approval
+    (S.INVESTIGATING, S.ESCALATED, A.AGENT),  # "the AI could not handle it" is not an agent action
+    (S.RESOLVED, S.CLOSED, A.AGENT),  # closing is a timer for now
 ]
 
 
@@ -50,6 +56,15 @@ def test_there_are_exactly_eleven_arrows():
 @pytest.mark.parametrize(("current", "new", "actor"), FORBIDDEN)
 def test_forbidden_moves(current, new, actor):
     assert not can_transition(current, new, actor)
+
+
+def test_allowed_next_lists_what_an_agent_can_do():
+    assert allowed_next(S.INVESTIGATING, A.AGENT) == [
+        S.WAITING_FOR_CUSTOMER,
+        S.RESOLVED,
+    ]
+    assert allowed_next(S.WAITING_FOR_CUSTOMER, A.AGENT) == []
+    assert allowed_next(S.CLOSED, A.AGENT) == []
 
 
 def test_resolving_sets_resolved_at():
