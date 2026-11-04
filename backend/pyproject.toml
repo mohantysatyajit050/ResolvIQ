@@ -16,6 +16,7 @@ dependencies = [
     "boto3>=1.43.118",
     "filetype>=1.2.0",
     "python-multipart>=0.0.32",
+    "groq>=1.7.0",
 ]
 
 [dependency-groups]

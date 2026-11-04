@@ -1,4 +1,4 @@
-from typing import Literal
+﻿from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -32,6 +32,13 @@ class Settings(BaseSettings):
     max_upload_bytes: int = 5 * 1024 * 1024  # 5 MB per file
     max_attachments_per_ticket: int = 5
     download_url_expire_seconds: int = 300  # signed download links last 5 minutes
+
+    # LLM (the key lives only in backend/.env and is never committed)
+    llm_provider: str = "groq"
+    llm_api_key: str = ""  # empty by default so tests and tools work without a key
+    llm_model: str = "llama-3.1-8b-instant"
+    llm_timeout_seconds: float = 30.0
+    llm_max_retries: int = 3  # waits 1, 2 and 4 seconds between tries
 
 
 settings = Settings()
