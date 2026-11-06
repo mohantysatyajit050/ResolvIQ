@@ -36,9 +36,11 @@ class Settings(BaseSettings):
     # LLM (the key lives only in backend/.env and is never committed)
     llm_provider: str = "groq"
     llm_api_key: str = ""  # empty by default so tests and tools work without a key
-    llm_model: str = "llama-3.1-8b-instant"
+    llm_model: str = "openai/gpt-oss-20b"
     llm_timeout_seconds: float = 30.0
     llm_max_retries: int = 3  # waits 1, 2 and 4 seconds between tries
+    llm_max_tokens: int = 1000  # room for the model's thinking plus the JSON answer
+    llm_reasoning_effort: str = "low"  # gpt-oss: low, medium or high. "off" = do not send
 
 
 settings = Settings()
