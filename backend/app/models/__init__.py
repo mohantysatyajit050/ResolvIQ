@@ -1,6 +1,7 @@
-from app.models.address import Address
+﻿from app.models.address import Address
 from app.models.attachment import Attachment
 from app.models.order import Order, OrderItem, OrderStatus
+from app.models.policy import Policy
 from app.models.product import Product
 from app.models.ticket import Ticket, TicketIntent, TicketPriority, TicketStatus
 from app.models.ticket_message import SenderType, TicketMessage
@@ -12,6 +13,7 @@ __all__ = [
     "Order",
     "OrderItem",
     "OrderStatus",
+    "Policy",
     "Product",
     "SenderType",
     "Ticket",
