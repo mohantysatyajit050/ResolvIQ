@@ -1,4 +1,4 @@
-import pytest
+﻿import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
@@ -40,6 +40,9 @@ def _ensure_test_database() -> None:
 def engine():
     _ensure_test_database()
     test_engine = create_engine(_test_url, pool_pre_ping=True, connect_args=_CONNECT_ARGS)
+    # the policies table has a vector column, so the test database needs the extension
+    with test_engine.begin() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
     Base.metadata.drop_all(test_engine)
     Base.metadata.create_all(test_engine)
     yield test_engine

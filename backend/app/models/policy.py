@@ -1,6 +1,7 @@
 ﻿import uuid
 from datetime import datetime
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
@@ -17,18 +18,24 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.db.base import Base, check_in
 from app.models.ticket import TicketIntent
 
+# Size of the vectors made by BAAI/bge-small-en-v1.5. A different model with a
+# different size needs a migration for the column.
+EMBEDDING_DIM = 384
+
 
 class Policy(Base):
-    """One chunk (one '## section') of a policy document.
-
-    Day 15 adds the embedding column used for search.
-    """
+    """One chunk (one '## section') of a policy document, plus its embedding."""
 
     __tablename__ = "policies"
     __table_args__ = (
         CheckConstraint(check_in("applies_to", TicketIntent), name="ck_policies_applies_to"),
         CheckConstraint("version >= 1", name="ck_policies_version"),
         CheckConstraint("chunk_index >= 0", name="ck_policies_chunk_index"),
+        # a vector must always say which model made it
+        CheckConstraint(
+            "(embedding IS NULL) = (embedding_model IS NULL)",
+            name="ck_policies_embedding_has_model",
+        ),
         UniqueConstraint(
             "slug", "version", "chunk_index", name="uq_policies_slug_version_chunk"
         ),
@@ -49,6 +56,9 @@ class Policy(Base):
     is_active: Mapped[bool] = mapped_column(
         Boolean, default=True, server_default=text("true"), index=True
     )
+    # the chunk's meaning as numbers, and which model made them (empty until embedded)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(EMBEDDING_DIM))
+    embedding_model: Mapped[str | None] = mapped_column(String(100))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

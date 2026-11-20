@@ -42,5 +42,9 @@ class Settings(BaseSettings):
     llm_max_tokens: int = 1000  # room for the model's thinking plus the JSON answer
     llm_reasoning_effort: str = "low"  # gpt-oss: low, medium or high. "off" = do not send
 
+    # Embeddings (a small model runs on this machine, so no API key is needed)
+    embedding_model: str = "BAAI/bge-small-en-v1.5"  # 384 numbers per text
+    embedding_cache_dir: str = ""  # empty = ~/.cache/resolviq/fastembed
+
 
 settings = Settings()

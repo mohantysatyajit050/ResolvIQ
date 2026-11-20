@@ -1,0 +1,236 @@
+[
+  {
+    "id": "en-01",
+    "tag": "english",
+    "query": "how many hours do I have to report a damaged product",
+    "expected": "damaged-item/Reporting window",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Reporting window (0.85), Resolution (0.72), Evidence required (0.68)"
+  },
+  {
+    "id": "en-02",
+    "tag": "english",
+    "query": "do I need to send a photo of the broken item",
+    "expected": "damaged-item/Evidence required",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Evidence required (0.81), Resolution (0.72), Reporting window (0.71)"
+  },
+  {
+    "id": "en-03",
+    "tag": "english",
+    "query": "can I get a replacement for my cracked phone",
+    "expected": "damaged-item/Resolution",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Resolution (0.61), Evidence required (0.60), Reporting window (0.55)"
+  },
+  {
+    "id": "en-04",
+    "tag": "english",
+    "query": "I got a different colour than I ordered, does that count as a wrong item",
+    "expected": "wrong-item/What counts as a wrong item",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "What counts as a wrong item (0.82), Reporting window (0.69), Resolution (0.68)"
+  },
+  {
+    "id": "en-05",
+    "tag": "english",
+    "query": "how long can I wait before reporting the wrong product I received",
+    "expected": "wrong-item/Reporting window",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Reporting window (0.83), Resolution (0.73), What counts as a wrong item (0.72)"
+  },
+  {
+    "id": "en-06",
+    "tag": "english",
+    "query": "my order is 5 days past the expected date and not here, can I cancel",
+    "expected": "late-delivery/What the customer can ask for",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "What the customer can ask for (0.77), When an order counts as late (0.72), Orders that were already delivered late (0.70)"
+  },
+  {
+    "id": "en-07",
+    "tag": "english",
+    "query": "when does an order count as late",
+    "expected": "late-delivery/When an order counts as late",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "When an order counts as late (0.90), Orders that were already delivered late (0.82), What the customer can ask for (0.80)"
+  },
+  {
+    "id": "en-08",
+    "tag": "english",
+    "query": "when will the money reach my bank account",
+    "expected": "refund-timing/When the money arrives",
+    "filtered_rank": 2,
+    "any_rank": 2,
+    "filtered_got": "Customers asking about a refund (0.73), When the money arrives (0.73), When a refund starts (0.69)"
+  },
+  {
+    "id": "en-09",
+    "tag": "english",
+    "query": "how soon do you start my refund after it is approved",
+    "expected": "refund-timing/When a refund starts",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "When a refund starts (0.92), When the money arrives (0.82), Customers asking about a refund (0.82)"
+  },
+  {
+    "id": "en-10",
+    "tag": "english",
+    "query": "my refund was started 8 business days ago and nothing arrived",
+    "expected": "refund-timing/Customers asking about a refund",
+    "filtered_rank": 3,
+    "any_rank": 3,
+    "filtered_got": "When a refund starts (0.78), When the money arrives (0.77), Customers asking about a refund (0.76)"
+  },
+  {
+    "id": "hi-01",
+    "tag": "hinglish",
+    "query": "mera order abhi tak nahi aaya, kitne din baad cancel kar sakte hain",
+    "expected": "late-delivery/What the customer can ask for",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "What the customer can ask for (0.61), When an order counts as late (0.60), How the refund is paid (0.58)"
+  },
+  {
+    "id": "hi-02",
+    "tag": "hinglish",
+    "query": "paisa bank account mein kab tak aayega",
+    "expected": "refund-timing/When the money arrives",
+    "filtered_rank": 2,
+    "any_rank": 3,
+    "filtered_got": "Customers asking about a refund (0.54), When the money arrives (0.54), When a refund starts (0.51)"
+  },
+  {
+    "id": "hi-03",
+    "tag": "hinglish",
+    "query": "phone ki screen toot gayi thi, kitne ghante mein batana hai",
+    "expected": "damaged-item/Reporting window",
+    "filtered_rank": 3,
+    "any_rank": null,
+    "filtered_got": "Resolution (0.48), Evidence required (0.48), Reporting window (0.45)"
+  },
+  {
+    "id": "hi-04",
+    "tag": "hinglish",
+    "query": "galat item aaya hai, photo bhejni padegi kya",
+    "expected": "wrong-item/Evidence required",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Evidence required (0.61), What counts as a wrong item (0.53), Resolution (0.52)"
+  },
+  {
+    "id": "hi-05",
+    "tag": "hinglish",
+    "query": "order delivery date ke 4 din baad aaya, kya mujhe kuch milega",
+    "expected": "late-delivery/Orders that were already delivered late",
+    "filtered_rank": 3,
+    "any_rank": 3,
+    "filtered_got": "What the customer can ask for (0.64), When an order counts as late (0.63), Orders that were already delivered late (0.62)"
+  },
+  {
+    "id": "hi-06",
+    "tag": "hinglish",
+    "query": "refund approve hone ke kitne ghante baad shuru hota hai",
+    "expected": "refund-timing/When a refund starts",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "When a refund starts (0.66), Customers asking about a refund (0.62), When the money arrives (0.61)"
+  },
+  {
+    "id": "long-01",
+    "tag": "long",
+    "query": "I ordered a blender and it reached with a crack in the jar. It was delivered yesterday evening. What can you do for me?",
+    "expected": "damaged-item/Resolution",
+    "filtered_rank": 2,
+    "any_rank": 2,
+    "filtered_got": "Reporting window (0.66), Resolution (0.63), Evidence required (0.61)"
+  },
+  {
+    "id": "long-02",
+    "tag": "long",
+    "query": "I received headphones but the box had speakers inside instead. Can I swap them?",
+    "expected": "wrong-item/Resolution",
+    "filtered_rank": 2,
+    "any_rank": 2,
+    "filtered_got": "What counts as a wrong item (0.57), Resolution (0.57), Reporting window (0.53)"
+  },
+  {
+    "id": "long-03",
+    "tag": "long",
+    "query": "The package was supposed to come on the 10th, today is the 15th and still nothing. I want my money back.",
+    "expected": "late-delivery/What the customer can ask for",
+    "filtered_rank": 1,
+    "any_rank": null,
+    "filtered_got": "What the customer can ask for (0.64), Orders that were already delivered late (0.63), How the refund is paid (0.63)"
+  },
+  {
+    "id": "long-04",
+    "tag": "long",
+    "query": "My order showed delivered two days after the promised date and I am really upset about it.",
+    "expected": "late-delivery/Orders that were already delivered late",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Orders that were already delivered late (0.70), What the customer can ask for (0.68), When an order counts as late (0.66)"
+  },
+  {
+    "id": "typo-01",
+    "tag": "typo",
+    "query": "wen will mony reach my acount",
+    "expected": "refund-timing/When the money arrives",
+    "filtered_rank": 3,
+    "any_rank": null,
+    "filtered_got": "Customers asking about a refund (0.51), When a refund starts (0.51), When the money arrives (0.49)"
+  },
+  {
+    "id": "typo-02",
+    "tag": "typo",
+    "query": "my order is delayd, can i cancle it",
+    "expected": "late-delivery/What the customer can ask for",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "What the customer can ask for (0.72), When an order counts as late (0.67), Orders that were already delivered late (0.67)"
+  },
+  {
+    "id": "tricky-01",
+    "tag": "tricky",
+    "query": "is it ok to send only a photo of the box and not the item",
+    "expected": "damaged-item/Evidence required",
+    "filtered_rank": 1,
+    "any_rank": 2,
+    "filtered_got": "Evidence required (0.73), Resolution (0.65), Reporting window (0.62)"
+  },
+  {
+    "id": "tricky-02",
+    "tag": "tricky",
+    "query": "what if I report the damage after 2 days",
+    "expected": "damaged-item/Reporting window",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "Reporting window (0.76), Resolution (0.71), Evidence required (0.65)"
+  },
+  {
+    "id": "tricky-03",
+    "tag": "tricky",
+    "query": "I got size M instead of L, is that a wrong item",
+    "expected": "wrong-item/What counts as a wrong item",
+    "filtered_rank": 1,
+    "any_rank": 1,
+    "filtered_got": "What counts as a wrong item (0.73), Reporting window (0.62), Resolution (0.61)"
+  },
+  {
+    "id": "tricky-04",
+    "tag": "tricky",
+    "query": "my refund reached the bank after 10 days, is that normal",
+    "expected": "refund-timing/Customers asking about a refund",
+    "filtered_rank": 2,
+    "any_rank": 2,
+    "filtered_got": "When the money arrives (0.80), Customers asking about a refund (0.77), When a refund starts (0.76)"
+  }
+]
